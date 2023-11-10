@@ -1,0 +1,46 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ .Values.namespace }}-{{ .Values.pv_1.name }}-pv
+spec:
+  capacity:
+    storage: {{ .Values.pv_1.storage }}
+  accessModes:
+    - {{ .Values.pv_1.accessModes }}
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: {{ .Values.pv_1.storageClassName }}
+  csi:
+    driver: {{ .Values.pv_1.driver }}
+    readOnly: false
+    volumeHandle: {{ .Values.namespace }}-{{ .Release.Name }}-volumeid
+    volumeAttributes:
+      resourceGroup: {{ .Values.pv_1.storageRg }}
+      shareName: {{ .Values.pv_1.shareName }}
+    nodeStageSecretRef:
+      name: {{ .Values.pv_1.storageAccountKeySecretName }}
+      namespace: {{ .Values.pv_1.storageAccountKeySecretNs }}
+  mountOptions:
+    - dir_mode=0555
+    - file_mode=0555
+    - uid=0
+    - gid=0
+    - mfsymlinks
+    - cache=strict
+    - nosharesock
+    - nobrl
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Values.namespace }}-{{ .Values.pv_1.name }}-pvc
+  namespace: {{ .Values.namespace }}
+spec:
+  accessModes:
+    - {{ .Values.pv_1.accessModes }}
+  storageClassName: {{ .Values.pv_1.storageClassName }}
+  volumeName: {{ .Values.namespace }}-{{ .Values.pv_1.name }}-pv
+  resources:
+    requests:
+      storage: {{ .Values.pv_1.storage }}

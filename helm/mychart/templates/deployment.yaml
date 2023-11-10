@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-mshekhawat
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: {{ .Values.replicaCount | default 1 }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-mshekhawat
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-mshekhawat
+    spec:
+      containers:
+        - name: {{ .Release.Name }}-mshekhawat
+          image: {{ .Values.image.name }}:{{ .Values.image.tag }}
+          imagePullPolicy: Always
+          ports:
+            - containerPort: {{ .Values.container.port }}
+              protocol: TCP
