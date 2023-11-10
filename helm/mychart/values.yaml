@@ -20,3 +20,15 @@ pv_1:
   storageClassName: 'azurefile-csi'
   storageAccountKeySecretNs: 'default'
   storageAccountKeySecretName: 'storage-account-key-secret'
+
+pv_2:
+  name: 'two'
+  driver: 'file.csi.azure.com'
+  storage: '5Gi'
+  mountPath: '/mnt/two'
+  shareName: 'share-two'
+  storageRg:
+  accessModes: 'ReadWriteMany'
+  storageClassName: 'azurefile-csi'
+  storageAccountKeySecretNs: 'default'
+  storageAccountKeySecretName: 'storage-account-key-secret'

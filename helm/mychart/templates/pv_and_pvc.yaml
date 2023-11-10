@@ -44,3 +44,53 @@ spec:
   resources:
     requests:
       storage: {{ .Values.pv_1.storage }}
+
+
+---
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ .Values.namespace }}-{{ .Values.pv_2.name }}-pv
+spec:
+  capacity:
+    storage: {{ .Values.pv_2.storage }}
+  accessModes:
+    - {{ .Values.pv_2.accessModes }}
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: {{ .Values.pv_2.storageClassName }}
+  csi:
+    driver: {{ .Values.pv_2.driver }}
+    readOnly: false
+    volumeHandle: {{ .Values.namespace }}-{{ .Release.Name }}-volumeid
+    volumeAttributes:
+      resourceGroup: {{ .Values.pv_2.storageRg }}
+      shareName: {{ .Values.pv_2.shareName }}
+    nodeStageSecretRef:
+      name: {{ .Values.pv_2.storageAccountKeySecretName }}
+      namespace: {{ .Values.pv_2.storageAccountKeySecretNs }}
+  mountOptions:
+    - dir_mode=0777
+    - file_mode=0777
+    - uid=0
+    - gid=0
+    - mfsymlinks
+    - cache=strict
+    - nosharesock
+    - nobrl
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Values.namespace }}-{{ .Values.pv_2.name }}-pvc
+  namespace: {{ .Values.namespace }}
+spec:
+  accessModes:
+    - {{ .Values.pv_2.accessModes }}
+  storageClassName: {{ .Values.pv_2.storageClassName }}
+  volumeName: {{ .Values.namespace }}-{{ .Values.pv_2.name }}-pv
+  resources:
+    requests:
+      storage: {{ .Values.pv_2.storage }}
