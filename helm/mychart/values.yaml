@@ -3,8 +3,8 @@ namespace: 'test'
 replicaCount: 1
 
 image:
-  name: 'nginx'
-  tag: '1.14.2'
+  name: 'busybox'
+  tag: '1.35.0'
 
 container:
   port: 80

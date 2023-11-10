@@ -13,10 +13,31 @@ spec:
       labels:
         app: {{ .Release.Name }}-mshekhawat
     spec:
+      volumes:
+        - name: pvc-one
+          persistentVolumeClaim:
+            claimName: {{ .Values.namespace }}-{{ .Values.pv_1.name }}-pvc
+        - name: pvc-two
+          persistentVolumeClaim:
+            claimName: {{ .Values.namespace }}-{{ .Values.pv_2.name }}-pvc
       containers:
         - name: {{ .Release.Name }}-mshekhawat
           image: {{ .Values.image.name }}:{{ .Values.image.tag }}
           imagePullPolicy: Always
-          ports:
-            - containerPort: {{ .Values.container.port }}
-              protocol: TCP
+          command:
+            - "/bin/sh"
+            - "-c"
+            - >
+              while IFS= read -r line; do
+                echo "Read line: $line";
+              done < /mnt/one/input.txt
+              echo "Done Reading";
+              for i in $(seq 1 3600); do
+                echo "Writing to file. Iteration: $i" >> /mnt/two/output.txt;
+                sleep 1;
+              done
+          volumeMounts:
+            - mountPath: {{ .Values.pv_1.mountPath }}
+              name: pvc-one
+            - mountPath: {{ .Values.pv_2.mountPath }}
+              name: pvc-two
