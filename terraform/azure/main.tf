@@ -3,4 +3,5 @@ module "azure" {
 
   resource_groups = var.resource_groups
   aks             = var.aks
+  storage         = var.storage
 }

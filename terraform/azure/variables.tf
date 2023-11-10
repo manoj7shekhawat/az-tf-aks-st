@@ -5,3 +5,7 @@ variable "resource_groups" {
 variable "aks" {
   type = any
 }
+
+variable "storage" {
+  type = any
+}
