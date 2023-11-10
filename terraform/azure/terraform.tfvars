@@ -6,8 +6,9 @@ resource_groups = {
 }
 
 aks = {
-  name                = "mshekhawat-aks"
-  dns_prefix          = "mshekhawataks"
+  name                            = "mshekhawat-aks"
+  dns_prefix                      = "mshekhawataks"
+  storage_account_key_secret_name = "storage-account-key-secret"
 
   default_node_pool = {
     name       = "default"
@@ -25,9 +26,9 @@ aks = {
 }
 
 storage = {
-  name                     = "mshekhawatst"
-  account_tier             = "Standard"
-  account_replication_type = "LRS"
+  name                            = "mshekhawatst"
+  account_tier                    = "Standard"
+  account_replication_type        = "LRS"
 
   share = {
     one = {

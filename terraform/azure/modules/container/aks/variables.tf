@@ -9,8 +9,9 @@ variable "location" {
 variable "aks" {
   type = object({
 
-    name       = string
-    dns_prefix = string
+    name                            = string
+    dns_prefix                      = string
+    storage_account_key_secret_name = string
 
     default_node_pool = object({
       name       = string
@@ -24,4 +25,16 @@ variable "aks" {
 
     tags = any
   })
+}
+
+variable "storage_account_name" {
+  type = string
+}
+
+variable "storage_primary_access_key" {
+  type = string
+}
+
+variable "initial_mode" {
+  type = bool
 }

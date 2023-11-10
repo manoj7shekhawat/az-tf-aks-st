@@ -9,3 +9,7 @@ variable "aks" {
 variable "storage" {
   type = any
 }
+
+variable "initial_mode" {
+  type = any
+}

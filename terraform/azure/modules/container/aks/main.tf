@@ -16,3 +16,20 @@ resource "azurerm_kubernetes_cluster" "aks" {
 
   tags = var.aks.tags
 }
+
+resource "kubernetes_secret" "storage_account_key_secret" {
+  count = var.initial_mode ? 0 : 1
+  metadata {
+    name = var.aks.storage_account_key_secret_name
+  }
+  type = "Opaque"
+
+  data = {
+    "azurestorageaccountkey"  = var.storage_primary_access_key
+    "azurestorageaccountname" = var.storage_account_name
+  }
+
+  depends_on = [
+    azurerm_kubernetes_cluster.aks
+  ]
+}
