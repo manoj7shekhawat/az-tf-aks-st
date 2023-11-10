@@ -13,3 +13,9 @@ resource "azurerm_storage_share" "file_share" {
   storage_account_name = azurerm_storage_account.storage_account.name
   quota                = each.value.quota
 }
+
+resource "azurerm_storage_share_file" "share_file" {
+  name             = "input.txt"
+  storage_share_id = azurerm_storage_share.file_share["one"].id
+  source           = "./modules/storage/input.txt"
+}

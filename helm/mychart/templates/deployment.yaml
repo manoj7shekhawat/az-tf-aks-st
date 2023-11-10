@@ -1,0 +1,119 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-mshekhawat-1
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: {{ .Values.replicaCount | default 1 }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-mshekhawat-1
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-mshekhawat-1
+    spec:
+      volumes:
+        - name: pvc-one
+          persistentVolumeClaim:
+            claimName: {{ .Values.namespace }}-{{ .Values.pv_1.name }}-pvc
+        - name: pvc-two
+          persistentVolumeClaim:
+            claimName: {{ .Values.namespace }}-{{ .Values.pv_2.name }}-pvc
+      containers:
+        - name: {{ .Release.Name }}-mshekhawat-1
+          image: {{ .Values.image.name }}:{{ .Values.image.tag }}
+          imagePullPolicy: Always
+          command:
+            - "/bin/sh"
+            - "-c"
+            - >
+              while IFS= read -r line; do
+                echo "Read line: $line";
+              done < /mnt/one/input.txt
+              echo "Done Reading";
+              for i in $(seq 1 3600); do
+                echo "Writing to file. Iteration: $i" >> /mnt/two/output.txt;
+                sleep 1;
+              done
+          volumeMounts:
+            - mountPath: {{ .Values.pv_1.mountPath }}
+              name: pvc-one
+            - mountPath: {{ .Values.pv_2.mountPath }}
+              name: pvc-two
+
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-mshekhawat-2
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: {{ .Values.replicaCount | default 1 }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-mshekhawat-2
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-mshekhawat-2
+    spec:
+      volumes:
+        - name: pvc-one
+          persistentVolumeClaim:
+            claimName: {{ .Values.namespace }}-{{ .Values.pv_1.name }}-pvc
+      containers:
+        - name: {{ .Release.Name }}-mshekhawat-2
+          image: {{ .Values.image.name }}:{{ .Values.image.tag }}
+          imagePullPolicy: Always
+          command:
+            - "/bin/sh"
+            - "-c"
+            - >
+              while IFS= read -r line; do
+                echo "Read line: $line";
+              done < /mnt/one/input.txt
+              echo "Done Reading";
+          volumeMounts:
+            - mountPath: {{ .Values.pv_1.mountPath }}
+              name: pvc-one
+
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-mshekhawat-3
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: {{ .Values.replicaCount | default 1 }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-mshekhawat-3
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-mshekhawat-3
+    spec:
+      volumes:
+        - name: pvc-two
+          persistentVolumeClaim:
+            claimName: {{ .Values.namespace }}-{{ .Values.pv_2.name }}-pvc
+      containers:
+        - name: {{ .Release.Name }}-mshekhawat-3
+          image: {{ .Values.image.name }}:{{ .Values.image.tag }}
+          imagePullPolicy: Always
+          command:
+            - "/bin/sh"
+            - "-c"
+            - >
+              for i in $(seq 1 3600); do
+                echo "Writing to file. Iteration: $i" >> /mnt/two/output.txt;
+                sleep 1;
+              done
+          volumeMounts:
+            - mountPath: {{ .Values.pv_2.mountPath }}
+              name: pvc-two

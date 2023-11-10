@@ -1,0 +1,34 @@
+namespace: 'test'
+
+replicaCount: 1
+
+image:
+  name: 'busybox'
+  tag: '1.35.0'
+
+container:
+  port: 80
+
+pv_1:
+  name: 'one'
+  driver: 'file.csi.azure.com'
+  storage: '3Gi'
+  mountPath: '/mnt/one'
+  shareName: 'share-one'
+  storageRg:
+  accessModes: 'ReadOnlyMany'
+  storageClassName: 'azurefile-csi'
+  storageAccountKeySecretNs: 'default'
+  storageAccountKeySecretName: 'storage-account-key-secret'
+
+pv_2:
+  name: 'two'
+  driver: 'file.csi.azure.com'
+  storage: '5Gi'
+  mountPath: '/mnt/two'
+  shareName: 'share-two'
+  storageRg:
+  accessModes: 'ReadWriteMany'
+  storageClassName: 'azurefile-csi'
+  storageAccountKeySecretNs: 'default'
+  storageAccountKeySecretName: 'storage-account-key-secret'
