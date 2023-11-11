@@ -3,6 +3,8 @@ Repo for testing a bug in Azure AKS and Storage file share
 
 ### Commands: Terraform
 - `terraform init -backend-config=backend.conf`
+- `terraform plan -var=initial_mode=true`
+- `terraform apply -var=initial_mode=true`
 - `terraform plan`
 - `terraform apply`
 
