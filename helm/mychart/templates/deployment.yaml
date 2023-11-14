@@ -28,12 +28,8 @@ spec:
             - "/bin/sh"
             - "-c"
             - >
-              while IFS= read -r line; do
-                echo "Read line: $line";
-              done < /mnt/one/input.txt
-              echo "Done Reading";
               for i in $(seq 1 3600); do
-                echo "Writing to file. Iteration: $i" >> /mnt/two/output.txt;
+                echo "Writing to file. Iteration: $i" >> /logs/output.txt;
                 sleep 1;
               done
           volumeMounts:
@@ -72,10 +68,10 @@ spec:
             - "/bin/sh"
             - "-c"
             - >
-              while IFS= read -r line; do
-                echo "Read line: $line";
-              done < /mnt/one/input.txt
-              echo "Done Reading";
+              for i in $(seq 1 3600); do
+                echo "Iteration: $i";
+                sleep 1;
+              done
           volumeMounts:
             - mountPath: {{ .Values.pv_1.mountPath }}
               name: pvc-one
@@ -111,7 +107,7 @@ spec:
             - "-c"
             - >
               for i in $(seq 1 3600); do
-                echo "Writing to file. Iteration: $i" >> /mnt/two/output.txt;
+                echo "Writing to file. Iteration: $i" >> /logs/output.txt;
                 sleep 1;
               done
           volumeMounts:

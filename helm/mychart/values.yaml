@@ -13,7 +13,7 @@ pv_1:
   name: 'one'
   driver: 'file.csi.azure.com'
   storage: '3Gi'
-  mountPath: '/mnt/one'
+  mountPath: '/mnt'
   shareName: 'share-one'
   storageRg:
   accessModes: 'ReadOnlyMany'
@@ -25,7 +25,7 @@ pv_2:
   name: 'two'
   driver: 'file.csi.azure.com'
   storage: '5Gi'
-  mountPath: '/mnt/two'
+  mountPath: '/logs'
   shareName: 'share-two'
   storageRg:
   accessModes: 'ReadWriteMany'
